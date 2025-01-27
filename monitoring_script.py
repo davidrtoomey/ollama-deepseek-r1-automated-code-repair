@@ -63,17 +63,20 @@ def send_error_to_ollama(error_message, script_content):
         )
         # Extract the content from the response
         response_text = response.message.content.strip()
+        print(f"Response text received:\n{response_text}\n")
+
+        # Extract code using the helper function
         fixed_code = extract_code_from_response(response_text)
 
         if fixed_code:
+            print("Code successfully extracted from Ollama's response.")
             return fixed_code
         else:
             print("Failed to extract code from Ollama's response.")
-            print("Full response received:")
-            print(response_text)
+            print("Full response received:\n", response_text)
             return None
     except Exception as e:
-        print(f"Failed to communicate with Ollama: {e}")
+        print(f"An error occurred while communicating with Ollama: {e}")
         return None
 
 def update_script(script_path, new_content):
@@ -124,6 +127,7 @@ def main():
 
             # Get the fixed code from Ollama
             fixed_code = send_error_to_ollama(stderr, current_code)
+            print('fixed_code:', fixed_code)
 
             if fixed_code:
                 # Update the script with the fixed code
